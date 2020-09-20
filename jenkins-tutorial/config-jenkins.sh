@@ -17,9 +17,18 @@ sudo apt-get update
 sudo apt-get install docker-ce -y
 
 # Azure CLI
-sudo curl -L https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-sudo apt-get install apt-transport-https
-sudo apt-get update && sudo apt-get install azure-cli
+sudo apt-get install ca-certificates curl apt-transport-https lsb-release gnupg
+
+curl -sL https://packages.microsoft.com/keys/microsoft.asc |
+    gpg --dearmor |
+    sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
+
+AZ_REPO=$(lsb_release -cs)
+echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" |
+    sudo tee /etc/apt/sources.list.d/azure-cli.list
+
+sudo apt-get update
+sudo apt-get install azure-cli
 
 # Kubectl
 cd /tmp/
